@@ -22,16 +22,21 @@ You can view the live version of the app [here](https://weatherapp-pi-one.vercel
 ## Setup
 
 1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-2. Navigate to the project directory:
-   cd <project-directory>
-3. Install the required dependencies:
-   pip install -r requirements.txt
-4. Run the application:
-   python3 weather.py
+   `git clone <repository-url>`
 
-Deployment
-The application is deployed on Vercel. The vercel.json file is configured to handle the deployment settings. 
-Notes
-Resizing for Fit: If the application appears too large or does not fit your screen properly, you can adjust the zoom level of your browser.
+2. Navigate to the project directory:
+   `cd <project-directory>`
+
+3. Install the required dependencies:
+   `pip install -r requirements.txt`
+
+4. Run the application:
+   `python3 weather.py`
+
+## Deployment
+
+The application is deployed on Vercel. The `vercel.json` file is configured to handle the deployment settings.
+
+## Notes
+
+- **Resizing for Fit:** If the application appears too large or does not fit your screen properly, you can adjust the zoom level of your browser.
