@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import requests
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', template_folder='templates')
 
 API_KEY = "0869a893baff5f431715c018db8f72a6"
 BASE_URL = "http://api.openweathermap.org/data/2.5/"
