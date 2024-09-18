@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather App</h1>
+        <div class="search-bar">
+            <input type="text" id="cityInput" aria-label="Enter city" placeholder="Enter city">
+            <button onclick="getWeather()">Get Weather</button>
+            <button onclick="getForecast()">Get Forecast</button>
+            <button onclick="getLocationWeather()">Use Current Location</button>
+        </div>
+
+        <div id="weatherInfo" class="weather-info"></div>
+        <div id="forecastInfo" class="forecast-info"></div>
+
+        <div class="unit-selector">
+            <label for="unit">Temperature Unit:</label>
+            <select id="unit" aria-label="Select temperature unit" onchange="updateUnit()">
+                <option value="metric">Celsius</option>
+                <option value="imperial">Fahrenheit</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="loading" class="spinner" style="display:none;"></div>
+
+    <script>
+        function showLoading() {
+            document.getElementById('loading').style.display = 'block';
+        }
+
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        // Function to format the current date in the desired format
+        function getFormattedDate() {
+            const date = new Date();
+            return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
+        }
+
+        function getWeather() {
+            showLoading();
+            let city = document.getElementById('cityInput').value;
+            let unit = document.getElementById('unit').value;
+            $.get(`/weather?city=${city}&unit=${unit}`, function(data) {
+                hideLoading();
+                if (data.main) {
+                    const formattedDate = getFormattedDate(); // Get current date
+                    $('#weatherInfo').html(`
+                        <div class="weather-card">
+                            <h2>${data.name}</h2>
+                            <p>Date: ${formattedDate}</p> <!-- Display the date -->
+                            <p class="temperature">${data.main.temp}°</p>
+                            <p>Condition: ${data.weather[0].description}</p>
+                            <p>Wind Speed: ${data.wind.speed} m/s</p>
+                        </div>
+                    `);
+                } else {
+                    $('#weatherInfo').html('<p>Error fetching weather data. Please check the city name and try again.</p>');
+                }
+            }).fail(function() {
+                hideLoading();
+                $('#weatherInfo').html('<p>Error fetching weather data. Please try again later.</p>');
+            });
+        }
+
+        function fetchAndDisplayForecast(lat, lon) {
+            showLoading();
+            $.get(`/forecast?lat=${lat}&lon=${lon}`, function(data) {
+                hideLoading();
+                if (data.list) {
+                    let forecastHtml = '<h2>5-Day Forecast</h2>';
+                    let forecastsByDate = {};
+                    let today = getFormattedDate(); // Get the current date
+                    data.list.forEach(item => {
+                        let date = new Date(item.dt * 1000).toLocaleDateString();
+                        // Exclude today's forecast
+                        if (date !== today && !forecastsByDate[date]) {
+                            forecastsByDate[date] = {
+                                temp: item.main.temp,
+                                condition: item.weather[0].description
+                            };
+                        }
+                    });
+
+                    // Display the forecast horizontally
+                    forecastHtml += '<div class="forecast-container">';
+                    for (const [date, details] of Object.entries(forecastsByDate)) {
+                        forecastHtml += `
+                            <div class="forecast-card">
+                                <p>Date: ${date}</p>
+                                <p>Temperature: ${details.temp}°C</p>
+                                <p>Condition: ${details.condition}</p>
+                            </div>
+                        `;
+                    }
+                    forecastHtml += '</div>'; // Close the forecast container
+                    $('#forecastInfo').html(forecastHtml);
+                } else {
+                    $('#forecastInfo').html('<p>Error fetching forecast data. Please try again later.</p>');
+                }
+            }).fail(function() {
+                hideLoading();
+                $('#forecastInfo').html('<p>Error fetching forecast data. Please try again later.</p>');
+            });
+        }
+
+        function getForecast() {
+            showLoading();
+            let city = document.getElementById('cityInput').value;
+            $.get(`/weather?city=${city}`, function(data) {
+                hideLoading();
+                if (data.coord) {
+                    let lat = data.coord.lat;
+                    let lon = data.coord.lon;
+                    fetchAndDisplayForecast(lat, lon);
+                } else {
+                    $('#forecastInfo').html('<p>Error fetching city coordinates. Please check the city name and try again.</p>');
+                }
+            }).fail(function() {
+                hideLoading();
+                $('#forecastInfo').html('<p>Error fetching city data. Please try again later.</p>');
+            });
+        }
+
+        function getLocationWeather() {
+            if (navigator.geolocation) {
+                showLoading();
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    let lat = position.coords.latitude;
+                    let lon = position.coords.longitude;
+                    $.get(`/weather?lat=${lat}&lon=${lon}`, function(data) {
+                        hideLoading();
+                        if (data.main) {
+                            const formattedDate = getFormattedDate(); // Get current date
+                            $('#weatherInfo').html(`
+                                <div class="weather-card">
+                                    <h2>Current Location</h2>
+                                    <p>Date: ${formattedDate}</p>
+                                    <p class="temperature">${data.main.temp}°</p>
+                                    <p>Condition: ${data.weather[0].description}</p>
+                                    <p>Wind Speed: ${data.wind.speed} m/s</p>
+                                </div>
+                            `);
+                        } else {
+                            $('#weatherInfo').html('<p>Error fetching weather data. Please try again later.</p>');
+                        }
+                    }).fail(function() {
+                        hideLoading();
+                        $('#weatherInfo').html('<p>Error fetching weather data. Please try again later.</p>');
+                    });
+                    fetchAndDisplayForecast(lat, lon);
+                }, function(error) {
+                    hideLoading();
+                    $('#weatherInfo').html('<p>Geolocation error: ' + error.message + '</p>');
+                });
+            } else {
+                $('#weatherInfo').html('<p>Geolocation is not supported by this browser.</p>');
+            }
+        }
+
+        function updateUnit() {
+            getWeather();
+            getForecast();
+        }
+    </script>
+</body>
+</html>
