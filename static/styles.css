@@ -1,116 +1,117 @@
 /* General Styles */
 body {
-    font-family: 'Arial', sans-serif;
-    background: url('/static/images/last.png') no-repeat center center fixed;
+    font-family: 'Arial', sans-serif; /* Set font for the entire page */
+    background: url('/static/images/last.png') no-repeat center center fixed; /* Set background image */
     background-size: cover; /* Ensure the image covers the entire background */
-    color: #333;
-    text-align: center;
-    margin: 0;
-    padding: 0;
+    color: #333; /* Default text color */
+    text-align: center; /* Center-align text */
+    margin: 0; /* Remove default margin */
+    padding: 0; /* Remove default padding */
 }
 
 .container {
-    max-width: 1000px; /* Increase the width for more space */
-    margin: 50px auto;
-    background: transparent; /* Make the container background fully transparent */
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-    position: relative;
+    max-width: 1000px; /* Set max width for the container */
+    margin: 50px auto; /* Center container with margin */
+    background: transparent; /* Make container background fully transparent */
+    padding: 20px; /* Add padding inside the container */
+    border-radius: 10px; /* Round corners */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Add shadow effect */
+    position: relative; /* Positioning context for child elements */
 }
 
 h1 {
-    font-size: 2.5em;
-    color: #fff; /* Change text color to white for better contrast against the background image */
-    margin-bottom: 20px;
+    font-size: 2.5em; /* Set font size for the header */
+    color: #fff; /* Change header text color to white */
+    margin-bottom: 20px; /* Space below the header */
 }
 
 .search-bar {
-    margin-bottom: 20px;
+    margin-bottom: 20px; /* Space below the search bar */
 }
 
 input[type="text"] {
-    padding: 10px;
-    font-size: 16px;
-    width: calc(100% - 120px);
-    border: 2px solid #3498db;
-    border-radius: 5px;
-    margin-right: 10px;
+    padding: 10px; /* Inner padding for input */
+    font-size: 16px; /* Font size for input */
+    width: calc(100% - 120px); /* Set width minus button width */
+    border: 2px solid #3498db; /* Border color for input */
+    border-radius: 5px; /* Round corners for input */
+    margin-right: 10px; /* Space between input and button */
 }
 
 button {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #3498db;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 5px;
-    transition: background-color 0.3s;
+    padding: 10px 20px; /* Inner padding for buttons */
+    font-size: 16px; /* Font size for buttons */
+    background-color: #3498db; /* Button background color */
+    color: #fff; /* Button text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Round corners for buttons */
+    cursor: pointer; /* Change cursor on hover */
+    margin: 5px; /* Space around buttons */
+    transition: background-color 0.3s; /* Smooth transition for background color */
 }
 
 button:hover {
-    background-color: #2980b9;
+    background-color: #2980b9; /* Darker background on hover */
 }
 
 .weather-info, .forecast-info {
-    margin-top: 20px;
+    margin-top: 20px; /* Space above weather and forecast sections */
 }
 
 .weather-card, .forecast-card {
-    background: rgba(255, 255, 255, 0.8); /* Slightly transparent background for cards to maintain readability */
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 15px;
-    margin-bottom: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    display: inline-block; /* Adjust display for forecast cards */
-    text-align: left;
-    width: 18%; /* Ensure the cards fit horizontally */
+    background: rgba(255, 255, 255, 0.8); /* Semi-transparent background for cards */
+    border: 1px solid #ddd; /* Light border for cards */
+    border-radius: 10px; /* Round corners for cards */
+    padding: 15px; /* Inner padding for cards */
+    margin-bottom: 10px; /* Space below each card */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+    display: inline-block; /* Display cards inline */
+    text-align: left; /* Left-align text inside cards */
+    width: 18%; /* Set width for forecast cards */
 }
 
 .weather-card h2 {
-    margin: 0;
-    font-size: 1.8em;
-    color: #000; /* Change the city name color to black */
+    margin: 0; /* Remove default margin for header */
+    font-size: 1.8em; /* Set font size for city name */
+    color: #000; /* Change city name color to black */
 }
 
 .temperature {
-    font-size: 2em;
-    color: #e74c3c;
+    font-size: 2em; /* Larger font size for temperature */
+    color: #e74c3c; /* Red color for temperature */
 }
 
 .unit-selector {
-    margin-top: 20px;
+    margin-top: 20px; /* Space above unit selector */
 }
 
 select {
-    padding: 10px;
-    font-size: 16px;
-    border: 2px solid #3498db;
-    border-radius: 5px;
+    padding: 10px; /* Inner padding for select dropdown */
+    font-size: 16px; /* Font size for select dropdown */
+    border: 2px solid #3498db; /* Border color for dropdown */
+    border-radius: 5px; /* Round corners for dropdown */
 }
 
 .spinner {
-    border: 4px solid rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
-    border-top: 4px solid #3498db;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-    margin: 20px auto;
+    border: 4px solid rgba(0, 0, 0, 0.1); /* Light border for spinner */
+    border-radius: 50%; /* Make it circular */
+    border-top: 4px solid #3498db; /* Darker top for spinner */
+    width: 50px; /* Width of spinner */
+    height: 50px; /* Height of spinner */
+    animation: spin 1s linear infinite; /* Spin animation */
+    margin: 20px auto; /* Center spinner */
 }
 
+/* Keyframes for spinner animation */
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
 
-/* Forecast Container for Horizontal Alignment */
+/* Forecast Container for horizontal alignment of forecast cards */
 .forecast-container {
-    display: flex;
-    justify-content: space-between; /* Spread the forecast cards */
-    flex-wrap: nowrap;
-    overflow: hidden; /* Prevent horizontal scrolling */
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space out forecast cards */
+    flex-wrap: nowrap; /* Prevent wrapping */
+    overflow: hidden; /* Hide overflow */
 }

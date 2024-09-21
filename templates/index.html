@@ -4,24 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather App</title>
+    <!-- Link to the CSS file for styling -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Include jQuery library for easier DOM manipulation -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="container">
         <h1>Weather App</h1>
         <div class="search-bar">
+            <!-- Input for city name -->
             <input type="text" id="cityInput" aria-label="Enter city" placeholder="Enter city">
+            <!-- Button to get current weather -->
             <button onclick="getWeather()">Get Weather</button>
+            <!-- Button to get weather forecast -->
             <button onclick="getForecast()">Get Forecast</button>
+            <!-- Button to use current location for weather -->
             <button onclick="getLocationWeather()">Use Current Location</button>
         </div>
 
+        <!-- Section to display weather information -->
         <div id="weatherInfo" class="weather-info"></div>
+        <!-- Section to display forecast information -->
         <div id="forecastInfo" class="forecast-info"></div>
 
         <div class="unit-selector">
             <label for="unit">Temperature Unit:</label>
+            <!-- Dropdown to select temperature unit -->
             <select id="unit" aria-label="Select temperature unit" onchange="updateUnit()">
                 <option value="metric">Celsius</option>
                 <option value="imperial">Fahrenheit</option>
@@ -29,59 +38,64 @@
         </div>
     </div>
 
+    <!-- Loading spinner, hidden by default -->
     <div id="loading" class="spinner" style="display:none;"></div>
 
     <script>
+        // Show loading spinner
         function showLoading() {
             document.getElementById('loading').style.display = 'block';
         }
 
+        // Hide loading spinner
         function hideLoading() {
             document.getElementById('loading').style.display = 'none';
         }
 
-        // Function to format the current date in the desired format
+        // Get the current date in a specific format
         function getFormattedDate() {
             const date = new Date();
             return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
         }
 
+        // Fetch and display weather information
         function getWeather() {
-            showLoading();
-            let city = document.getElementById('cityInput').value;
-            let unit = document.getElementById('unit').value;
+            showLoading(); // Show loading spinner
+            let city = document.getElementById('cityInput').value; // Get city input
+            let unit = document.getElementById('unit').value; // Get selected unit
             $.get(`/weather?city=${city}&unit=${unit}`, function(data) {
-                hideLoading();
+                hideLoading(); // Hide loading spinner
                 if (data.main) {
-                    const formattedDate = getFormattedDate(); // Get current date
-                    $('#weatherInfo').html(`
-                        <div class="weather-card">
+                    const formattedDate = getFormattedDate(); // Format the current date
+                    $('#weatherInfo').html(
+                        `<div class="weather-card">
                             <h2>${data.name}</h2>
-                            <p>Date: ${formattedDate}</p> <!-- Display the date -->
+                            <p>Date: ${formattedDate}</p> <!-- Show current date -->
                             <p class="temperature">${data.main.temp}°</p>
                             <p>Condition: ${data.weather[0].description}</p>
                             <p>Wind Speed: ${data.wind.speed} m/s</p>
-                        </div>
-                    `);
+                        </div>`
+                    );
                 } else {
                     $('#weatherInfo').html('<p>Error fetching weather data. Please check the city name and try again.</p>');
                 }
             }).fail(function() {
-                hideLoading();
+                hideLoading(); // Hide loading spinner
                 $('#weatherInfo').html('<p>Error fetching weather data. Please try again later.</p>');
             });
         }
 
+        // Fetch and display the weather forecast based on coordinates
         function fetchAndDisplayForecast(lat, lon) {
-            showLoading();
+            showLoading(); // Show loading spinner
             $.get(`/forecast?lat=${lat}&lon=${lon}`, function(data) {
-                hideLoading();
+                hideLoading(); // Hide loading spinner
                 if (data.list) {
-                    let forecastHtml = '<h2>5-Day Forecast</h2>';
-                    let forecastsByDate = {};
-                    let today = getFormattedDate(); // Get the current date
+                    let forecastHtml = '<h2>5-Day Forecast</h2>'; // Start forecast section
+                    let forecastsByDate = {}; // Store forecasts by date
+                    let today = getFormattedDate(); // Get today's date
                     data.list.forEach(item => {
-                        let date = new Date(item.dt * 1000).toLocaleDateString();
+                        let date = new Date(item.dt * 1000).toLocaleDateString(); // Format forecast date
                         // Exclude today's forecast
                         if (date !== today && !forecastsByDate[date]) {
                             forecastsByDate[date] = {
@@ -91,75 +105,76 @@
                         }
                     });
 
-                    // Display the forecast horizontally
+                    // Display the forecast cards horizontally
                     forecastHtml += '<div class="forecast-container">';
                     for (const [date, details] of Object.entries(forecastsByDate)) {
-                        forecastHtml += `
-                            <div class="forecast-card">
+                        forecastHtml += 
+                            `<div class="forecast-card">
                                 <p>Date: ${date}</p>
                                 <p>Temperature: ${details.temp}°C</p>
                                 <p>Condition: ${details.condition}</p>
-                            </div>
-                        `;
+                            </div>`;
                     }
-                    forecastHtml += '</div>'; // Close the forecast container
-                    $('#forecastInfo').html(forecastHtml);
+                    forecastHtml += '</div>'; // Close forecast container
+                    $('#forecastInfo').html(forecastHtml); // Insert forecast HTML
                 } else {
                     $('#forecastInfo').html('<p>Error fetching forecast data. Please try again later.</p>');
                 }
             }).fail(function() {
-                hideLoading();
+                hideLoading(); // Hide loading spinner
                 $('#forecastInfo').html('<p>Error fetching forecast data. Please try again later.</p>');
             });
         }
 
+        // Get the weather forecast for a city
         function getForecast() {
-            showLoading();
-            let city = document.getElementById('cityInput').value;
+            showLoading(); // Show loading spinner
+            let city = document.getElementById('cityInput').value; // Get city input
             $.get(`/weather?city=${city}`, function(data) {
-                hideLoading();
+                hideLoading(); // Hide loading spinner
                 if (data.coord) {
-                    let lat = data.coord.lat;
-                    let lon = data.coord.lon;
-                    fetchAndDisplayForecast(lat, lon);
+                    let lat = data.coord.lat; // Get latitude
+                    let lon = data.coord.lon; // Get longitude
+                    fetchAndDisplayForecast(lat, lon); // Fetch forecast using coordinates
                 } else {
                     $('#forecastInfo').html('<p>Error fetching city coordinates. Please check the city name and try again.</p>');
                 }
             }).fail(function() {
-                hideLoading();
+                hideLoading(); // Hide loading spinner
                 $('#forecastInfo').html('<p>Error fetching city data. Please try again later.</p>');
             });
         }
 
+        // Get weather using the user's current location
         function getLocationWeather() {
-            if (navigator.geolocation) {
-                showLoading();
+            if (navigator.geolocation) { // Check if geolocation is supported
+                showLoading(); // Show loading spinner
                 navigator.geolocation.getCurrentPosition(function(position) {
-                    let lat = position.coords.latitude;
-                    let lon = position.coords.longitude;
+                    let lat = position.coords.latitude; // Get user's latitude
+                    let lon = position.coords.longitude; // Get user's longitude
                     $.get(`/weather?lat=${lat}&lon=${lon}`, function(data) {
-                        hideLoading();
+                        hideLoading(); // Hide loading spinner
                         if (data.main) {
-                            const formattedDate = getFormattedDate(); // Get current date
-                            $('#weatherInfo').html(`
-                                <div class="weather-card">
+                            const formattedDate = getFormattedDate(); // Format current date
+                            $('#weatherInfo').html(
+                                `<div class="weather-card">
                                     <h2>Current Location</h2>
                                     <p>Date: ${formattedDate}</p>
                                     <p class="temperature">${data.main.temp}°</p>
                                     <p>Condition: ${data.weather[0].description}</p>
                                     <p>Wind Speed: ${data.wind.speed} m/s</p>
-                                </div>
-                            `);
+                                </div>`
+                            );
                         } else {
                             $('#weatherInfo').html('<p>Error fetching weather data. Please try again later.</p>');
                         }
                     }).fail(function() {
-                        hideLoading();
+                        hideLoading(); // Hide loading spinner
                         $('#weatherInfo').html('<p>Error fetching weather data. Please try again later.</p>');
                     });
-                    fetchAndDisplayForecast(lat, lon);
+                    fetchAndDisplayForecast(lat, lon); // Fetch forecast using user's coordinates
                 }, function(error) {
-                    hideLoading();
+                    hideLoading(); // Hide loading spinner
                     $('#weatherInfo').html('<p>Geolocation error: ' + error.message + '</p>');
                 });
             } else {
@@ -167,9 +182,10 @@
             }
         }
 
+        // Update the weather and forecast based on selected temperature unit
         function updateUnit() {
-            getWeather();
-            getForecast();
+            getWeather(); // Get weather with new unit
+            getForecast(); // Get forecast with new unit
         }
     </script>
 </body>
