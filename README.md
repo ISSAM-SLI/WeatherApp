@@ -2,7 +2,7 @@
 ## Screenshots
 ![Weather](static/images/weather.png)
 
-![Weather 1](static/images/weather%201.png)
+![Wather 1](static/images/wather 1.png)
 
 
 ## Description
@@ -63,6 +63,6 @@ This project is licensed under the MIT License. See the LICENSE file for details
 *(Add your screenshots here)*
 
 # My Story 🌟
-I was inspired to create this Weather App during a rainy week when I wanted to check the weather easily. I wanted a project that could utilize my Flask skills and provide real-time data. The technical challenge was integrating the OpenWeatherMap API, as I had never worked with external APIs before. 
+I was inspired to create this Weather App during a rainy week when I wanted to check the weather easily. I wanted a project that could utilize my Flask skills and provide real-time data. The technical challenge was integrating the OpenWeatherMap API.
 
 At first, I struggled with understanding API calls and handling JSON data. After several attempts and some late nights, I finally managed to fetch the data correctly! For future iterations, I envision adding features like user accounts, a more detailed historical weather analysis, and even a mobile version of the app. This project not only enhanced my coding skills but also reinforced my passion for creating user-friendly applications.
