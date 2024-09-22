@@ -2,7 +2,7 @@
 ## Screenshots
 ![Weather](static/images/weather.png)
 
-![Wather 1](static/images/wather 1.png)
+![Wather 1](static/images/wather%201.png)
 
 
 ## Description
@@ -58,9 +58,6 @@ Contributions are welcome! Feel free to fork the repository and submit a pull re
 
 # Licensing
 This project is licensed under the MIT License. See the LICENSE file for details.
-
-# Screenshots
-*(Add your screenshots here)*
 
 # My Story 🌟
 I was inspired to create this Weather App during a rainy week when I wanted to check the weather easily. I wanted a project that could utilize my Flask skills and provide real-time data. The technical challenge was integrating the OpenWeatherMap API.
