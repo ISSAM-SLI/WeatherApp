@@ -8,6 +8,7 @@
 ## Description
 
 This is a simple weather web application built using Flask. It provides current weather information and a 5-day weather forecast based on the city or your current location. The app is styled with custom CSS and uses the OpenWeatherMap API to fetch weather data. The frontend is designed with HTML templates and CSS for styling.
+
 **Author:** [LinkedIn](https://www.linkedin.com/in/issam-slimani-52592a160).
 ## Project Structure
 
